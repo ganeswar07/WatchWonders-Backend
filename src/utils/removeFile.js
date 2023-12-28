@@ -1,6 +1,7 @@
 import fs from "fs";
 
 const removeLocalFiles = ({ files }) => {
+  console.log("internal remove local files")
   if (!files || files.length === 0) return;
 
   Object.values(files)
