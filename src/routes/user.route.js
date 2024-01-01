@@ -1,6 +1,17 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/user.controller.js";
 import { uploadFileOnLocal } from "../middlewares/multer.middleware.js";
+import {
+  registerUser,
+  loggedInUser,
+  logoutUser,
+  changePassword,
+  getCurrentUser,
+  newTokens,
+  updateAccountDetails,
+  updateAvatar,
+  updateCoverImage,
+} from "../controllers/user.controller.js";
+import { isAuthorized } from "../middlewares/auth.middleware.js";
 
 const userRouter = Router();
 
@@ -17,5 +28,26 @@ userRouter.route("/register").post(
   ]),
   registerUser
 );
+userRouter.route("/login").post(loggedInUser);
+
+userRouter.route("/tokens").patch(newTokens);
+
+userRouter.route("/logout").patch(isAuthorized, logoutUser);
+
+userRouter.route("/change-password").patch(isAuthorized, changePassword);
+
+userRouter.route("/current-user").get(isAuthorized, getCurrentUser);
+
+userRouter
+  .route("/update-accountDetails")
+  .patch(isAuthorized, updateAccountDetails);
+
+userRouter
+  .route("/change-avatar")
+  .patch(isAuthorized, uploadFileOnLocal.single("avatar"), updateAvatar);
+
+userRouter
+  .route("/change-coverImage")
+  .patch(isAuthorized, uploadFileOnLocal.single("coverImage"), updateCoverImage);
 
 export default userRouter;

@@ -4,15 +4,13 @@
  * @returns {Function} - An Express middleware function.
  */
 
-const asyncHandler = (requestFunction) => {
+const asyncHandler = (routeHandler) => {
   return async (req, res, next) => {
     try {
-      await Promise.resolve(requestFunction(req, res, next));
+      await Promise.resolve(routeHandler(req, res, next));
     } catch (error) {
       next(error);
     }
   };
 };
-
-
 export { asyncHandler };

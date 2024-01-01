@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import { ApiError } from "./ApiError.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,34 +8,73 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadFileOnCloud = async (localPath, fileType = "auto") => {
+const uploadFileOnCloud = async (
+  localPath,
+  resourceType = "auto",
+  fileType
+) => {
+  if (!localPath) throw new ApiError(400, "File not found");
   try {
-    if (!localPath) return null;
-    const response = await cloudinary.uploader.upload(localPath, {
-      resource_type: fileType,
-      folder: `WatchWonders/${fileType}`,
+    const uploadedFile = await cloudinary.uploader.upload(localPath, {
+      resource_type: resourceType,
+      folder: `WatchWonders/${resourceType}`,
     });
+
+    if (!uploadedFile || !uploadedFile.secure_url) {
+      throw new ApiError(
+        500,
+        `Error uploading ${fileType} ${resourceType} , please try again`
+      );
+    }
+
     fs.unlinkSync(localPath);
-    return response;
+
+    return uploadedFile;
   } catch (error) {
     fs.unlinkSync(localPath);
-    return null;
+
+    throw new ApiError(
+      error.statusCode || 500,
+      `${
+        error.message ||
+        `unable to upload ${fileType} ${resourceType}, Please try again`
+      }`
+    );
   }
 };
 
-const deleteFileOnCloud = async (url, fileType) => {
+const deleteFileOnCloud = async (url, resourceType, fileType) => {
+  if (!url) throw new ApiError(400, "URL not found");
+
+  const parts = url.split("/");
+  const filename = parts[parts.length - 1];
+  const folderName = parts.slice(-3, -1).join("/");
+  const public_id = `${folderName}/${filename.split(".")[0]}`;
+
   try {
-    if (!url) return null;
-    const parts = url.split("/");
-    const filename = parts[parts.length - 1];
-    const folderName = parts.slice(-3, -1).join("/");
-    const public_id = `${folderName}/${filename.split(".")[0]}`;
+    const resourceInfo = await cloudinary.api.resource(public_id);
+
+    if (!resourceInfo || !resourceInfo.public_id) {
+      console.log(
+        `Resource with public ID '${public_id}' not found. Skipping deletion.`
+      );
+      return false;
+    }
+
     const response = await cloudinary.uploader.destroy(public_id, {
-      resource_type: fileType,
+      resource_type: resourceType,
     });
-    return response;
+
+    if (!response || response.result !== "ok") {
+      throw new ApiError(500, `Error while deleting ${fileType}`);
+    }
+
+    return true;
   } catch (error) {
-    return null;
+    throw new ApiError(
+      error.statusCode || 500,
+      `${error.message || `Unable to delete ${fileType}. Please try again`}`
+    );
   }
 };
 
