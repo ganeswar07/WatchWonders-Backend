@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/user.route.js";
 import { errorHandler } from "./utils/index.js";
+import userRouter from "./routes/user.route.js";
+import channelRouter from "./routes/channel.route.js";
 
 const app = express();
 
@@ -22,7 +23,9 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/user", userRouter);
+
+app.use("/api/v1/channel",channelRouter);
 
 app.use(errorHandler);
 
