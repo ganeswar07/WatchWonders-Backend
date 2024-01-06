@@ -30,9 +30,9 @@ userRouter.route("/register").post(
 );
 userRouter.route("/login").post(loggedInUser);
 
-userRouter.route("/tokens").patch(newTokens);
+userRouter.route("/logout").post(isAuthorized, logoutUser);
 
-userRouter.route("/logout").patch(isAuthorized, logoutUser);
+userRouter.route("/tokens").patch(newTokens);
 
 userRouter.route("/change-password").patch(isAuthorized, changePassword);
 

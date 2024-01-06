@@ -163,11 +163,11 @@ const loggedInUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  User.findByIdAndUpdate(
-    req.user_id,
+  await User.findByIdAndUpdate(
+    req.user._id,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1,
       },
     },
     {
@@ -179,7 +179,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accessToken", httpOptions)
     .clearCookie("refreshToken", httpOptions)
-    .json(new ApiResponse(200, {}, "User successfully logged out"));
+    .json(new ApiResponse(200, {}, "User logged Out"));
 });
 
 const changePassword = asyncHandler(async (req, res) => {
@@ -251,8 +251,8 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { fullName, email } = req.body;
+
   if (!(fullName || email)) {
     throw new ApiError(404, "All fields are required");
   }
