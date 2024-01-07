@@ -51,7 +51,3 @@ We welcome contributions to enhance the WatchWonders-Backend project! To contrib
 If you encounter any issues or have suggestions, please [open an issue](https://github.com/ganeswar07/WatchWonders-Backend/issues) with a clear title and description.
 
 Thank you for contributing to WatchWonders-Backend!
-
----
-
-Feel free to customize these guidelines based on your specific project needs.

@@ -1,12 +1,8 @@
-
-
 # WatchWonders-Backend
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 > Backend component for the WatchWonders project - A video hosting website in active development.
-
-
 
 ## Overview
 
@@ -97,4 +93,3 @@ Contributions are welcome! Please follow the [Contribution Guidelines](CONTRIBUT
 
 This project is licensed under the [MIT License](LICENSE).
 
----
