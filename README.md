@@ -98,15 +98,3 @@ Contributions are welcome! Please follow the [Contribution Guidelines](CONTRIBUT
 This project is licensed under the [MIT License](LICENSE).
 
 ---
-
-**Note:** This README is a template. Update it with the specific details and structure of your project. Mention that the project is under development for transparency with potential contributors and users.
-## Contributing
-
-We welcome contributions to enhance and improve the project. If you'd like to contribute, please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE.md).
-
-
-
