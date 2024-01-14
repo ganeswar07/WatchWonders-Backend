@@ -2,8 +2,6 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./utils/index.js";
-import userRouter from "./routes/user.route.js";
-import channelRouter from "./routes/channel.route.js";
 
 const app = express();
 
@@ -23,9 +21,14 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
-app.use("/api/v1/user", userRouter);
+////////////////////////////////////////////////////////////////
+import userRouter from "./routes/user.route.js";
+import channelRouter from "./routes/channel.route.js";
+import videoRouter from "./routes/video.route.js";
 
-app.use("/api/v1/channel",channelRouter);
+app.use("/api/v1/users", userRouter);
+
+app.use("/api/v1/videos", videoRouter);
 
 app.use(errorHandler);
 
